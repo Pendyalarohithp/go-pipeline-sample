@@ -28,8 +28,8 @@ pipeline:
             steps:
               - step:
                   type: Run
-                  name: Run_1
+                  name: Run unit tests
                   identifier: Run_1
                   spec:
                     shell: Sh
-                    command: echo "welocome to harness CI"
+                    command: go test
