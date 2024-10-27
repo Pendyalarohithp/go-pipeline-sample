@@ -1,0 +1,35 @@
+pipeline:
+  name: Build go-pipeline-sample
+  identifier: Build_gopipelinesample
+  projectIdentifier: Sample_Project
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Test_connector
+        repoName: go-pipeline-sample
+        build: <+input>
+  stages:
+    - stage:
+        name: Build_stage
+        identifier: Build_stage
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    shell: Sh
+                    command: echo "welocome to harness CI"
