@@ -31,5 +31,38 @@ pipeline:
                   name: Run unit tests
                   identifier: Run_1
                   spec:
+                    connectorRef: <+input>
+                    image: golang:1.15
                     shell: Sh
-                    command: go test
+                    command: |-
+                      set +e
+                                            go get gotest.tools/gotestsum
+                                            gotestsum --format=standard-verbose --junitfile unit-tests.xml
+                                            exit 0
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - "*.xml"
+              - step:
+                  type: Run
+                  name: build app
+                  identifier: build_app
+                  spec:
+                    connectorRef: <+input>
+                    image: golang:1.15
+                    shell: Sh
+                    command: |-
+                      set +e
+                                            go get gotest.tools/gotestsum
+                                            CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo
+                                            exit 0
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Build and push image to docker hub
+                  identifier: Build_and_push_image_to_docker_hub
+                  spec:
+                    connectorRef: <+input>
+                    repo: <+input>
+                    tags:
+                      - latest
